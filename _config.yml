@@ -1,0 +1,13 @@
+# GitHub Pages publishes only the static HTML. The PHP sources need a PHP
+# server with MySQL and must not be served as raw files.
+exclude:
+  - site.php
+  - config.php
+  - comments.php
+  - comments-section.php
+  - index.php
+  - kedai-asna.php
+  - toko-asna.php
+  - schema.sql
+  - build-static.sh
+  - README.md

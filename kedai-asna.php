@@ -1,25 +1,8 @@
-<?php 
+<?php
+require_once __DIR__ . '/comments.php';
 
-include 'config.php';
-
-error_reporting(0); // For not showing any error
-
-if (isset($_POST['submit'])) { // Check press or not Post Comment Button
-	$name = $_POST['name']; // Get Name from form
-                           // Get Email from form
-	$comment = $_POST['comment']; // Get Comment from form
-
-	$sql = "INSERT INTO comments (name, comment)
-			VALUES ('$name', '$comment')";
-	$result = mysqli_query($conn, $sql);
-	if ($result) {
-		echo "<script>alert('Comment added successfully.')</script>";
-    header('Location: kedai-asna.php');
-	} else {
-		echo "<script>alert('Comment does not add.')</script>";
-	}
-}
-
+handle_comment_post($conn, 'kedai-asna');
+$comments = fetch_comments($conn);
 ?>
 
 <!DOCTYPE html>
@@ -75,17 +58,17 @@ if (isset($_POST['submit'])) { // Check press or not Post Comment Button
 <header id="header" class="d-flex align-items-center">
   <div class="container d-flex align-items-center justify-content-between">
 
-    <h1 class="logo"><img src="assets/img/asna.png" class="img-fluid" alt="" height="120px" width="120px"><a href="index.html"><span></span></a></h1>
+    <h1 class="logo"><img src="assets/img/asna.png" class="img-fluid" alt="" height="120px" width="120px"><a href="<?= page_url('index') ?>"><span></span></a></h1>
     <!-- Uncomment below if you prefer to use an image logo -->
-    <!-- <a href="index.html" class="logo"><img src="assets/img/logo.png" alt=""></a>-->
+    <!-- <a href="<?= page_url('index') ?>" class="logo"><img src="assets/img/logo.png" alt=""></a>-->
 
     <nav id="navbar" class="navbar">
       <ul>
-        <li><a class="nav-link scrollto " href="index.html">Beranda</a></li>
+        <li><a class="nav-link scrollto " href="<?= page_url('index') ?>">Beranda</a></li>
           <li class="dropdown"><a href="#"><span>Pilar Usaha</span> <i class="bi bi-chevron-down active"></i></a>
             <ul>
-              <li><a href="toko-asna.php">Toko Asna</a></li>
-              <li><a href="kedai-asna.php">Kedai Asna</a></li>
+              <li><a href="<?= page_url('toko-asna') ?>">Toko Asna</a></li>
+              <li><a href="<?= page_url('kedai-asna') ?>">Kedai Asna</a></li>
             </ul>
           </li>
         </ul>
@@ -151,53 +134,7 @@ if (isset($_POST['submit'])) { // Check press or not Post Comment Button
   <!-- ======= Footer ======= -->
   <footer id="footer">
 
-  <div class="footer-newsletter">
-      <div class="container">
-        <div class="row justify-content-center">
-          <div class="col-lg-6">
-            <h4>Sampaikan ulasan</h4>
-            <p></p>
-            <div class="wrapper">
-              <form action="" method="POST" class="form">
-                <div class="row">
-                  <div class="input-group">
-                    <label for="name">Name</label>
-                    <input type="text" name="name" id="name" placeholder="Enter your Name" required>
-                  </div>
-                </div>
-                <div class="input-group textarea">
-                  <label for="comment">Comment</label>
-                  <textarea id="comment" name="comment" placeholder="Enter your Comment" required></textarea>
-                </div>
-                <div class="input-group">
-                  <button name="submit" class="btn">Post Comment</button>
-                </div>
-              </form>
-              <div class="prev-comments">
-                <?php                
-                $sql = "SELECT * FROM comments";
-                $result = mysqli_query($conn, $sql);
-                if (mysqli_num_rows($result)) {
-                  while ($row = mysqli_fetch_assoc($result)) {
-
-                ?>
-                <div class="single-item">
-                  <h4><?php echo $row['name']; ?></h4>
-                  
-                  <p><?php echo $row['comment']; ?></p>
-                </div>
-                <?php
-
-                  }
-                }
-                
-                ?>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <?php if (!STATIC_BUILD) { require __DIR__ . '/comments-section.php'; } ?>
 
     <div class="footer-top">
       <div class="container">
